@@ -147,6 +147,7 @@ class MergeWeightMask(object):
         node_pad_mask = cls.build_mask_subtree_only(device, num_heads, key_pad, node_pad, spans, b, t, n, m, **kwargs)
         # leave_pad_mask:       [b, 1, n, n + m]
         # node_pad_mask:        [b, 1, m, n + m]
+        # leave_pad_mask = leave_pad_mask.bool()
         pad_mask = torch.cat([leave_pad_mask, node_pad_mask], 2)
         return pad_mask
 
@@ -160,8 +161,8 @@ class MergeWeightMask(object):
                 node_pad = torch.ones_like(node_pad, dtype=node_pad.dtype, device=node_pad.device)
             else:
                 assert key_pad is None
-                node_pad = torch.ones(b, m, dtype=torch.uint8, device=device)
-                key_pad = torch.zeros(b, n, dtype=torch.uint8, device=device)
+                node_pad = torch.ones(b, m, dtype=torch.bool, device=device)
+                key_pad = torch.zeros(b, n, dtype=torch.bool, device=device)
             pad_mask = torch.cat([key_pad, node_pad], 1).view(b, 1, 1, n + m).contiguous().expand(b, 1, n, n + m)
         return pad_mask
 
@@ -180,8 +181,8 @@ class MergeWeightMask(object):
             # todo: leave_mask: [b, 1, m, n]
             l_rg = leave_range.view(1, 1, n)
             l_npad = (l_rg < spans[:, :, :1]) | (l_rg > spans[:, :, 1:])
-            l_npad |= node_pad.view(b, m, 1)
-            l_npad |= key_pad.view(b, 1, n)
+            l_npad |= node_pad.bool().view(b, m, 1)
+            l_npad |= key_pad.bool().view(b, 1, n)
             l_npad = l_npad.view(b, 1, m, n)
 
             # todo: node_mask:  [b, 1, m, m]
@@ -190,7 +191,7 @@ class MergeWeightMask(object):
             n_leave = n_leave.float()
             # n_leave:          [b, m, n]
             n_npad = torch.tril(torch.matmul(n_leave, n_leave.transpose(1, 2)).clamp_(0, 1)).type_as(l_npad)
-            n_npad = (~n_npad) | node_pad.view(b, 1, m)
+            n_npad = (~n_npad) | node_pad.bool().view(b, 1, m)
             n_npad = n_npad.view(b, 1, m, m)
 
             pad_mask = torch.cat([l_npad, n_npad], 3)
@@ -330,7 +331,7 @@ class MergeHierarchicalEmbedding(nn.Embedding):
         bh, n_, m, _ = mask.size()
         b = bh // self.num_heads
         with torch.no_grad():
-            fl_mask = torch.flip(mask, [2]).squeeze_(-1)
+            fl_mask = torch.flip(mask.int(), [2]).squeeze_(-1)
             if self.take_full_dim:
                 fl_mask = fl_mask.view(b, self.num_heads, m, n, m)[:, 0]
 

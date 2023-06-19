@@ -15,7 +15,6 @@ export fp16="${fp16:-0}"
 #export problem="${problem:-nstack_iwslt_ende_v2}"
 export problem="${problem:-nstack_merge_iwslt_ende_32k}"
 
-export RM_EXIST_DIR="${RM_EXIST_DIR:-y}"
 
 echo "CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES}, problem=${problem}"
 
@@ -57,7 +56,7 @@ mkdir -p ${log_dir}
 export log_file=${log_dir}/${PROBLEM}-${arch}-${ID}.log
 #    export MAX_UPDATE="${MAX_UPDATE:-35500}"
 export MAX_UPDATE="${MAX_UPDATE:-45000}"
-export nobar=1
+export nobar=0
 
 export LR="${LR:-0.0005}"
 export DROPOUT="${DROPOUT:-0.3}"

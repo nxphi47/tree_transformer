@@ -60,9 +60,9 @@ def average_checkpoints(inputs, ema_decay=1.0):
     for i, f in enumerate(inputs):
         state = torch.load(
             f,
-            map_location=(
-                lambda s, _: torch.serialization.default_restore_location(s, 'cpu')
-            ),
+            # map_location=(
+            #     lambda s, _: torch.serialization.default_restore_location(s, 'cpu')
+            # ),
         )
         # Copies over the settings from the first checkpoint
         if new_state is None:

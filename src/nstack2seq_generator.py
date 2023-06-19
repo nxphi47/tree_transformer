@@ -4,7 +4,7 @@ import torch
 
 from fairseq import search, utils
 from fairseq.models import FairseqIncrementalDecoder
-from ..heatmap import heatmap_utils
+from heatmap import heatmap_utils
 from fairseq.sequence_generator import SequenceGenerator, EnsembleModel
 
 
