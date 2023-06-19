@@ -432,8 +432,8 @@ def main(args):
 
     def make_all(lang, vocab):
         if args.trainpref:
-            print(f'!!!! Warning..... Not during en-fr target because already done!.....')
-            # make_dataset(vocab, args.trainpref, "train", lang, num_workers=args.workers)
+            # print(f'!!!! Warning..... Not during en-fr target because already done!.....')
+            make_dataset(vocab, args.trainpref, "train", lang, num_workers=args.workers)
 
         if args.validpref:
             for k, validpref in enumerate(args.validpref.split(",")):
@@ -462,8 +462,8 @@ def main(args):
     def make_all_tgt(lang, vocab):
         make_all(lang, vocab)
 
-    # make_all_src(args.source_lang, src_dict)
-    print(f'|||| WARNIONG no processing for source.')
+    make_all_src(args.source_lang, src_dict)
+    # print(f'|||| WARNIONG no processing for source.')
     if target:
         make_all_tgt(args.target_lang, tgt_dict)
         # print(f'No makign target')

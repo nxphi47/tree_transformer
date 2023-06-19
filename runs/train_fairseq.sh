@@ -184,7 +184,7 @@ export tee_end=""
 
 if [ $out_log == "y" ]; then
     echo "Printing logs to log file ${LOGFILE}"
-    export tee_begin=" -u "
+    # export tee_begin=" -u "
     export tee_end=" | tee ${LOGFILE}"
     touch ${LOGFILE}
 fi
@@ -214,7 +214,7 @@ echo "Run model ${ARCH}, ${HPARAMS}"
 
 if [ ${HPARAMS} == "transformer_base_stt2" ]; then
     export full_command="${init_command} \
-	--user-dir ${user_dir} \
+	--user-dir ${user_dir}/src \
 	--arch ${ARCH} \
 	--task ${TASK} \
 	--valid-subset ${VALID_SET} \
@@ -244,7 +244,7 @@ if [ ${HPARAMS} == "transformer_base_stt2" ]; then
 else
     echo "run else commands"
 	export full_command="${init_command} \
-	--user-dir ${user_dir} \
+	--user-dir ${user_dir}/src \
 	--arch ${ARCH} \
 	--task ${TASK} \
 	--source-lang ${src} \

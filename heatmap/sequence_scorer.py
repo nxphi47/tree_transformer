@@ -11,7 +11,7 @@ import torch.nn.functional as F
 from fairseq import utils
 
 from fairseq.sequence_generator import SequenceGenerator, EnsembleModel
-from ..src.nstack2seq_generator import Nstack2SeqGenerator
+# from src.nstack2seq_generator import Nstack2SeqGenerator
 
 GET_ENCOUT = bool(int(os.environ.get('get_encout', 0)))
 GET_INNER_ATT = bool(int(os.environ.get('get_inner_att', 0)))

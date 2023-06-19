@@ -63,7 +63,7 @@ class BinarizerDataset(data.Dataset):
 
     def _retrieve_lines_from_file(self, file):
         lines = []
-        with open(file, 'r') as f:
+        with open(file, 'r', encoding="UTF-8") as f:
             line = safe_readline(f)
             while line:
                 lines.append(line)

@@ -167,7 +167,7 @@ echo "Start generating"
 
 export command="$(which fairseq-generate) ${DATA_DIR} \
     --task ${TASK} \
-    --user-dir ${user_dir} \
+    --user-dir ${user_dir}/src \
     --path ${CHECKPOINT} \
     --left-pad-source ${LEFT_PAD_SRC} \
     --max-tokens ${INFER_BSZ} \
